@@ -1,6 +1,7 @@
 package schemakeepergo
 
 import (
+	"fmt"
 	"github.com/linkedin/goavro/v2"
 	"github.com/ory/dockertest/v3"
 	"log"
@@ -40,7 +41,8 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 		t.Error(err)
 	}
 
-	cfg := CreateConfiguration("http://localhost:" + port)
+	log.Println("Schemakeeper URL: ", fmt.Sprintf("http://localhost:%s)", port))
+	cfg := CreateConfiguration(fmt.Sprintf("http://localhost:%s)", port))
 	client := CreateDefaultSchemaKeeperClient(cfg)
 	_, err = client.GetSchemaById(1)
 
