@@ -27,7 +27,7 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 	var host string
 
 	err = pool.Retry(func() error {
-		host = resource.GetHostPort("9081/tcp")
+		host = resource.GetHostPort("9081")
 		return nil
 	})
 
