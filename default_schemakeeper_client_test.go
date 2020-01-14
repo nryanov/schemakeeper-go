@@ -24,10 +24,10 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 		log.Fatalf("Could not start resource: %s", err)
 	}
 
-	var port string
+	var host string
 
 	err = pool.Retry(func() error {
-		port = resource.GetPort("9081/tcp")
+		host = resource.GetHostPort("9081/tcp")
 		return nil
 	})
 
@@ -40,7 +40,7 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 		t.Error(err)
 	}
 
-	cfg := CreateConfiguration("http://localhost:" + port)
+	cfg := CreateConfiguration("http://" + host)
 	client := CreateDefaultSchemaKeeperClient(cfg)
 	_, err = client.GetSchemaById(1)
 
