@@ -34,6 +34,7 @@ func (d *MockSchemaKeeperClient) RegisterNewSchema(subject string, schema *goavr
 		d.UniqueId++
 		id = d.UniqueId
 		schemas.(*syncmap.Map).Store(schema.Schema(), id)
+		d.IdToSchema.Store(id, schema)
 		return d.UniqueId, nil
 	} else {
 		return id.(int32), nil
