@@ -3,6 +3,7 @@ package schemakeepergo
 import (
 	"github.com/linkedin/goavro/v2"
 	"github.com/ory/dockertest/v3"
+	dc "github.com/ory/dockertest/v3/docker"
 	"log"
 	"testing"
 )
@@ -13,7 +14,14 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 		log.Fatalf("Could not connect to docker: %s", err)
 	}
 
-	resource, err := pool.Run("schemakeeper/server", "0.1", []string{})
+	options := &dockertest.RunOptions{
+		Repository: "schemakeeper/server",
+		Tag:        "0.1",
+		PortBindings: map[dc.Port][]dc.PortBinding{
+			"9081": {{HostPort: "9081"}},
+		},
+	}
+	resource, err := pool.RunWithOptions(options)
 	if err != nil {
 		log.Fatalf("Could not start resource: %s", err)
 	}
