@@ -28,7 +28,7 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 	var port string
 
 	err = pool.Retry(func() error {
-		port = resource.GetPort("9081")
+		port = resource.GetPort("9081/tcp")
 		return nil
 	})
 
@@ -42,7 +42,7 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 	}
 
 	log.Println("Schemakeeper URL: ", fmt.Sprintf("http://localhost:%s)", port))
-	cfg := CreateConfiguration(fmt.Sprintf("http://localhost:%s)", port))
+	cfg := CreateConfiguration(fmt.Sprintf("http://localhost:%s", port))
 	client := CreateDefaultSchemaKeeperClient(cfg)
 	_, err = client.GetSchemaById(1)
 
