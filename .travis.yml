@@ -14,3 +14,10 @@ script:
   - go vet -x .
   - go test -covermode=atomic -coverprofile="cover.out" .
   - goveralls -coverprofile="cover.out"
+
+notifications:
+  email: false
+
+branches:
+  only:
+    - master

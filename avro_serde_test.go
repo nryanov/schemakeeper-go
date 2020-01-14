@@ -177,7 +177,7 @@ func TestAvroSerDe_ByteArray(t *testing.T) {
 
 	serializer := CreateAvroSerializer(cfg, cachedClient)
 	deserializer := CreateAvroDeserializer(cfg, cachedClient)
-	data, err := serializer.Serialize("s1", [...]byte{}, codec)
+	data, err := serializer.Serialize("s1", []uint8{1, 2, 3}, codec)
 	if err != nil {
 		t.Error(err)
 	}
@@ -187,7 +187,7 @@ func TestAvroSerDe_ByteArray(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !bytes.Equal(record.([]byte), []byte{}) {
+	if !bytes.Equal(record.([]uint8), []uint8{1, 2, 3}) {
 		t.Error("incorrect result")
 	}
 }
