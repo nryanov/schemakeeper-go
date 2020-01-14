@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/linkedin/goavro/v2"
 	"github.com/ory/dockertest/v3"
+	dc "github.com/ory/dockertest/v3/docker"
 	"log"
 	"testing"
 )
@@ -18,6 +19,9 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 		Repository: "schemakeeper/server",
 		Tag:        "0.1",
 		ExposedPorts: []string{"9081"},
+		PortBindings: map[dc.Port][]dc.PortBinding{
+			"9081": {{HostPort: "9081"}},
+		},
 	}
 
 	resource, err := pool.RunWithOptions(options)
