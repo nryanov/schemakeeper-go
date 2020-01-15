@@ -1,5 +1,9 @@
 # Schemakeeper-go
 
+[![Build Status](https://img.shields.io/travis/nryanov/schemakeeper-go/master.svg)](https://travis-ci.com/nryanov/schemakeeper-go)
+[![Coverage Status](https://coveralls.io/repos/github/nryanov/schemakeeper-go/badge.svg?branch=master)](https://coveralls.io/github/nryanov/schemakeeper-go?branch=master)
+[![GitHub license](https://img.shields.io/github/license/nryanov/schemakeeper-go)](https://github.com/nryanov/schemakeeper-go/blob/master/LICENSE.txt)
+
 This is a golang-client for [schemakeeper](https://github.com/nryanov/schemakeeper).
 
 ## Install 
