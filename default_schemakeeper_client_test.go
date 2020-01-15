@@ -1,17 +1,54 @@
 package schemakeepergo
 
 import (
+	"fmt"
 	"github.com/linkedin/goavro/v2"
+	"github.com/ory/dockertest/v3"
+	dc "github.com/ory/dockertest/v3/docker"
+	"log"
 	"testing"
+	"time"
 )
 
 func TestDefaultSchemaKeeperClient(t *testing.T) {
+	pool, err := dockertest.NewPool("")
+	if err != nil {
+		log.Fatalf("Could not connect to docker: %s", err)
+	}
+
+	options := &dockertest.RunOptions{
+		Repository: "schemakeeper/server",
+		Tag:        "0.1",
+		ExposedPorts: []string{"9081"},
+		PortBindings: map[dc.Port][]dc.PortBinding{
+			"9081": {{HostPort: "9081"}},
+		},
+	}
+
+	resource, err := pool.RunWithOptions(options)
+	if err != nil {
+		log.Fatalf("Could not start resource: %s", err)
+	}
+
+	var port string
+
+	err = pool.Retry(func() error {
+		port = resource.GetPort("9081/tcp")
+		return nil
+	})
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	time.Sleep(15 * time.Second)
+
 	codec, err := goavro.NewCodec(`"string"`)
 	if err != nil {
 		t.Error(err)
 	}
 
-	cfg := CreateConfiguration("http://192.168.99.100:9081")
+	cfg := CreateConfiguration(fmt.Sprintf("http://localhost:%s", port))
 	client := CreateDefaultSchemaKeeperClient(cfg)
 	_, err = client.GetSchemaById(1)
 
@@ -40,5 +77,10 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 
 	if schema.Schema() != codec.Schema() {
 		t.Errorf("Returned schema is not equal to schema used in registration")
+	}
+
+	err = pool.Purge(resource)
+	if err != nil {
+		t.Error(err)
 	}
 }

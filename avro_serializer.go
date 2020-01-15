@@ -22,13 +22,26 @@ func (a *avroSerializer) Serialize(subject string, data interface{}, schema *goa
 	if err != nil {
 		return nil, err
 	}
+
 	err = binary.Write(buffer, binary.LittleEndian, id)
 	if err != nil {
 		return nil, err
 	}
 
-	binaryData, ok := data.([]byte)
-	if ok {
+	switch inputData := data.(type) {
+	case []byte:
+		_, err = buffer.Write(inputData)
+		if err != nil {
+			return nil, err
+		}
+
+		return buffer.Bytes(), nil
+	default:
+		binaryData, err := schema.BinaryFromNative(nil, inputData)
+		if err != nil {
+			return nil, err
+		}
+
 		_, err = buffer.Write(binaryData)
 		if err != nil {
 			return nil, err
@@ -36,18 +49,6 @@ func (a *avroSerializer) Serialize(subject string, data interface{}, schema *goa
 
 		return buffer.Bytes(), nil
 	}
-
-	binaryData, err = schema.BinaryFromNative(nil, data)
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = buffer.Write(binaryData)
-	if err != nil {
-		return nil, err
-	}
-
-	return buffer.Bytes(), nil
 }
 
 func (a *avroSerializer) getSchemaId(subject string, schema *goavro.Codec) (int32, error) {

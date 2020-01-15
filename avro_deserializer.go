@@ -42,6 +42,10 @@ func (a *avroDeserializer) Deserialize(data []byte) (interface{}, error) {
 		return nil, err
 	}
 
+	if schema.Schema() == `"bytes"` {
+		return data[5:], nil
+	}
+
 	record, remained, err := schema.NativeFromBinary(data[5:])
 	if err != nil {
 		return nil, err
