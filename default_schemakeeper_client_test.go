@@ -7,6 +7,7 @@ import (
 	dc "github.com/ory/dockertest/v3/docker"
 	"log"
 	"testing"
+	"time"
 )
 
 func TestDefaultSchemaKeeperClient(t *testing.T) {
@@ -40,12 +41,13 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 		t.Error(err)
 	}
 
+	time.Sleep(15 * time.Second)
+
 	codec, err := goavro.NewCodec(`"string"`)
 	if err != nil {
 		t.Error(err)
 	}
 
-	log.Println("Schemakeeper URL: ", fmt.Sprintf("http://localhost:%s)", port))
 	cfg := CreateConfiguration(fmt.Sprintf("http://localhost:%s", port))
 	client := CreateDefaultSchemaKeeperClient(cfg)
 	_, err = client.GetSchemaById(1)
