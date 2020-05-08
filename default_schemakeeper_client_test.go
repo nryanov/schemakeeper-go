@@ -17,8 +17,8 @@ func TestDefaultSchemaKeeperClient(t *testing.T) {
 	}
 
 	options := &dockertest.RunOptions{
-		Repository: "schemakeeper/server",
-		Tag:        "0.1",
+		Repository: "nryanov/schemakeeper",
+		Tag:        "0.2.0",
 		ExposedPorts: []string{"9081"},
 		PortBindings: map[dc.Port][]dc.PortBinding{
 			"9081": {{HostPort: "9081"}},
