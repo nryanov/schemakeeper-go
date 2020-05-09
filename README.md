@@ -7,7 +7,7 @@
 This is a golang-client for [schemakeeper](https://github.com/nryanov/schemakeeper).
 
 ## Install 
-`go dep github.com/nryanov/schemakeeper-go 0.1`
+`go dep github.com/nryanov/schemakeeper-go 0.2.0`
 
 ## Usage
 ```go

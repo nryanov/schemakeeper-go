@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	APiVersion string = "v1"
+	APiVersion string = "v2"
 )
 
 type defaultSchemaKeeperClient struct {
@@ -54,14 +54,7 @@ func (d *defaultSchemaKeeperClient) RegisterNewSchema(subject string, schema *go
 		return -1, err
 	}
 
-	request, err := http.NewRequest("PUT", url, bytes.NewBuffer(jsonBody))
-	if err != nil {
-		return -1, err
-	}
-
-	request.Header.Add("Content-type", "application/json")
-
-	resp, err := d.Client.Do(request)
+	resp, err := d.Client.Post(url, "application/json", bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return -1, err
 	}
